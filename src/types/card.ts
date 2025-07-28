@@ -5,6 +5,8 @@ export interface MagicCard {
   manaCost?: string;
   type?: string;
   rarity?: string;
+  setNumber?: string;
+  manaValue?: number;
 }
 
 export interface AppState {
@@ -17,6 +19,12 @@ export interface AppState {
   isLoading: boolean;
   error: string | null;
   
+  // Sort options
+  sortBy: 'alphabetical' | 'setNumber' | 'manaValue' | 'type';
+  
+  // User management
+  userId: string | null;
+  
   // Actions
   addCards: (cardNames: string[]) => void;
   removeCard: (index: number) => void;
@@ -26,4 +34,7 @@ export interface AppState {
   resetProgress: () => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setSortBy: (sortBy: 'alphabetical' | 'setNumber' | 'manaValue' | 'type') => void;
+  setUserId: (userId: string | null) => void;
+  clearUserData: () => void;
 } 

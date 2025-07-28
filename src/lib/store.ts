@@ -11,6 +11,8 @@ export const useAppStore = create<AppState>()(
       favorites: [],
       isLoading: false,
       error: null,
+      sortBy: 'alphabetical',
+      userId: null,
 
       // Actions
       addCards: (cardNames: string[]) => {
@@ -21,7 +23,7 @@ export const useAppStore = create<AppState>()(
         set({ 
           cardList: cleanNames,
           currentCardIndex: 0,
-          error: null 
+          error: null
         });
       },
 
@@ -66,6 +68,23 @@ export const useAppStore = create<AppState>()(
       setError: (error: string | null) => {
         set({ error });
       },
+
+      setSortBy: (sortBy: 'alphabetical' | 'setNumber' | 'manaValue' | 'type') => {
+        set({ sortBy });
+      },
+
+      setUserId: (userId: string | null) => {
+        set({ userId });
+      },
+
+      clearUserData: () => {
+        set({ 
+          cardList: [],
+          currentCardIndex: 0,
+          favorites: [],
+          userId: null
+        });
+      },
     }),
     {
       name: 'magic-card-tinder-storage',
@@ -73,6 +92,8 @@ export const useAppStore = create<AppState>()(
         cardList: state.cardList,
         currentCardIndex: state.currentCardIndex,
         favorites: state.favorites,
+        sortBy: state.sortBy,
+        userId: state.userId,
       }),
     }
   )

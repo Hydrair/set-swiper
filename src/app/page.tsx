@@ -5,6 +5,8 @@ import Navigation from '@/components/Navigation';
 import CardInput from '@/components/CardInput';
 import CardDisplay from '@/components/CardDisplay';
 import FavoritesList from '@/components/FavoritesList';
+import ScryfallStatus from '@/components/ScryfallStatus';
+import CacheDebug from '@/components/CacheDebug';
 import { useAppStore } from '@/lib/store';
 
 type View = 'input' | 'swipe' | 'favorites';
@@ -37,9 +39,13 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50">
       <Navigation currentView={currentView} onViewChange={setCurrentView} />
       
+      <ScryfallStatus />
+      
       <main className="max-w-4xl mx-auto py-8 px-4">
         {renderCurrentView()}
       </main>
+
+      <CacheDebug />
     </div>
   );
 }
