@@ -1,30 +1,27 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
-import TinderCard from 'react-tinder-card';
-import { useAppStore } from '@/lib/store';
-import { searchCard } from '@/lib/scryfall';
-import { MagicCard } from '@/types/card';
-import { Heart, X } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { useAppStore } from "@/lib/store";
+import { searchCard } from "@/lib/scryfall";
+import { MagicCard } from "@/types/card";
+import { Heart, X } from "lucide-react";
+import ProgressIndicator from "./ProgressIndicator";
+import CompletionScreen from "./CompletionScreen";
+import SwipeCard from "./SwipeCard";
 
 export default function CardDisplay() {
-  const { 
-    cardList, 
-    currentCardIndex, 
-    favorites, 
-    isLoading, 
+  const {
+    cardList,
+    currentCardIndex,
+    favorites,
     error,
-    nextCard, 
-    addToFavorites, 
-    setLoading, 
-    setError 
+    nextCard,
+    addToFavorites,
+    setError,
   } = useAppStore();
 
   const [currentCard, setCurrentCard] = useState<MagicCard | null>(null);
   const [isLoadingCard, setIsLoadingCard] = useState(false);
-  const [swipeDirection, setSwipeDirection] = useState<string | null>(null);
-  const tinderCardRef = useRef<any>(null);
 
   // Load current card data
   useEffect(() => {
@@ -36,11 +33,11 @@ export default function CardDisplay() {
     const loadCard = async () => {
       setIsLoadingCard(true);
       setError(null);
-      
+
       try {
         const cardName = cardList[currentCardIndex];
         const cardData = await searchCard(cardName);
-        
+
         if (cardData) {
           setCurrentCard(cardData);
         } else {
@@ -50,15 +47,17 @@ export default function CardDisplay() {
         }
       } catch (error) {
         if (error instanceof Error) {
-          if (error.message.includes('Scryfall API')) {
-            setError('Scryfall API is currently experiencing issues. Please try again later.');
+          if (error.message.includes("Scryfall API")) {
+            setError(
+              "Scryfall API is currently experiencing issues. Please try again later."
+            );
           } else {
             setError(error.message);
           }
         } else {
-          setError('Failed to load card. Please try again.');
+          setError("Failed to load card. Please try again.");
         }
-        console.error('Error loading card:', error);
+        console.error("Error loading card:", error);
       } finally {
         setIsLoadingCard(false);
       }
@@ -68,34 +67,32 @@ export default function CardDisplay() {
   }, [cardList, currentCardIndex, nextCard, setError]);
 
   const onSwipe = (direction: string) => {
-    console.log('You swiped: ' + direction);
-    setSwipeDirection(direction);
-    
-    if (direction === 'right' && currentCard) {
+    console.log("You swiped: " + direction);
+
+    if (direction === "right" && currentCard) {
       addToFavorites(currentCard);
     }
-    
+
     // Move to next card after a short delay
     setTimeout(() => {
       nextCard();
-      setSwipeDirection(null);
     }, 300);
   };
 
   const onCardLeftScreen = (direction: string) => {
-    console.log(currentCard?.name + ' left the screen in direction: ' + direction);
+    console.log(
+      currentCard?.name + " left the screen in direction: " + direction
+    );
   };
 
   const handleSwipeRight = () => {
-    if (tinderCardRef.current) {
-      tinderCardRef.current.swipe('right');
-    }
+    // This will be handled by the SwipeCard component
+    onSwipe("right");
   };
 
   const handleSwipeLeft = () => {
-    if (tinderCardRef.current) {
-      tinderCardRef.current.swipe('left');
-    }
+    // This will be handled by the SwipeCard component
+    onSwipe("left");
   };
 
   // Show completion screen
@@ -105,48 +102,20 @@ export default function CardDisplay() {
 
   if (currentCardIndex >= cardList.length) {
     return (
-      <div className="w-full max-w-md mx-auto p-8 bg-white rounded-lg shadow-lg text-center">
-        <div className="mb-6">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Heart className="w-8 h-8 text-green-600" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            You've completed your deck!
-          </h2>
-          <p className="text-gray-600">
-            You've swiped through all {cardList.length} cards.
-          </p>
-        </div>
-        
-        <div className="space-y-3">
-          <p className="text-lg font-semibold text-gray-700">
-            Favorites: {favorites.length} cards
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-          >
-            Start Over
-          </button>
-        </div>
-      </div>
+      <CompletionScreen
+        totalCards={cardList.length}
+        favoritesCount={favorites.length}
+        onRestart={() => window.location.reload()}
+      />
     );
   }
 
   return (
     <div className="w-full max-w-sm mx-auto flex flex-col h-full">
-      {/* Progress indicator */}
-      <div className="mb-6 text-center pt-4">
-        <div className="text-sm text-gray-600 mb-2">
-          Card {currentCardIndex + 1} of {cardList.length}
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div 
-            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${((currentCardIndex + 1) / cardList.length) * 100}%` }}
-          />
-        </div>
-      </div>
+      <ProgressIndicator
+        currentIndex={currentCardIndex}
+        totalCount={cardList.length}
+      />
 
       {/* Error display */}
       {error && (
@@ -174,60 +143,22 @@ export default function CardDisplay() {
         </div>
 
         {/* Main card */}
-        <div id="main-card" className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-xs z-10">
-          {isLoadingCard ? (
-            <div id="loading-card" className="aspect-[745/1040] flex items-center justify-center bg-gray-100 rounded-lg">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
-                <p className="text-gray-600">Loading card...</p>
-              </div>
-            </div>
-          ) : currentCard ? (
-            <TinderCard
-              ref={tinderCardRef}
+        <div
+          id="main-card"
+          className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-xs z-10"
+        >
+          {currentCard ? (
+            <SwipeCard
+              card={currentCard}
               onSwipe={onSwipe}
               onCardLeftScreen={onCardLeftScreen}
-              swipeRequirementType="position"
-              swipeThreshold={150}
-              className="absolute w-full"
-            >
-              <div 
-                id="swipeable-card"
-                className="relative bg-white rounded-lg shadow-lg overflow-hidden cursor-grab active:cursor-grabbing select-none"
-                onDragStart={(e) => e.preventDefault()}
-              >
-                <div className="relative aspect-[745/1040]">
-                  <Image
-                    src={currentCard.imageUrl}
-                    alt={currentCard.name}
-                    fill
-                    className="object-cover select-none"
-                    sizes="(max-width: 768px) 100vw, 400px"
-                    priority
-                    draggable={false}
-                    onDragStart={(e) => e.preventDefault()}
-                  />
-                </div>
-                
-                <div className="p-3">
-                  <h3 className="text-base font-semibold text-gray-800 mb-1">
-                    {currentCard.name}
-                  </h3>
-                  {currentCard.manaCost && (
-                    <p className="text-xs text-gray-600 mb-1">
-                      Mana Cost: {currentCard.manaCost}
-                    </p>
-                  )}
-                  {currentCard.type && (
-                    <p className="text-xs text-gray-600">
-                      {currentCard.type}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </TinderCard>
+              isLoading={isLoadingCard}
+            />
           ) : (
-            <div id="no-card" className="aspect-[745/1040] flex items-center justify-center bg-gray-100 rounded-lg">
+            <div
+              id="no-card"
+              className="aspect-[745/1040] flex items-center justify-center bg-gray-100 rounded-lg"
+            >
               <p className="text-gray-600">No card to display</p>
             </div>
           )}
@@ -247,7 +178,7 @@ export default function CardDisplay() {
           >
             <X className="w-8 h-8 text-red-600" />
           </button>
-          
+
           <button
             id="like-button"
             onClick={handleSwipeRight}
@@ -261,4 +192,4 @@ export default function CardDisplay() {
       </div>
     </div>
   );
-} 
+}

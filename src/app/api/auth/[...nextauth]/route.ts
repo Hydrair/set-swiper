@@ -9,19 +9,18 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_SECRET!,
     }),
     CredentialsProvider({
-      name: 'Credentials',
+      name: 'Demo',
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
-        // Simple demo authentication
-        if (credentials?.email === 'demo@example.com' && credentials?.password === 'demo') {
+        // Demo account
+        if (credentials?.email === 'demo@example.com' && credentials?.password === 'demo123') {
           return {
-            id: '1',
+            id: 'demo-user',
             name: 'Demo User',
             email: 'demo@example.com',
-            image: 'https://via.placeholder.com/150'
           };
         }
         return null;
@@ -29,7 +28,7 @@ const handler = NextAuth({
     })
   ],
   session: {
-    strategy: 'jwt',
+    strategy: 'jwt'
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -40,14 +39,14 @@ const handler = NextAuth({
     },
     async session({ session, token }) {
       if (token && session.user) {
-        (session.user as any).id = token.id as string;
+        (session.user as { id?: string }).id = token.id as string;
       }
       return session;
     },
   },
   pages: {
-    signIn: '/auth/signin',
-  },
+    signIn: '/auth/signin'
+  }
 });
 
 export { handler as GET, handler as POST }; 

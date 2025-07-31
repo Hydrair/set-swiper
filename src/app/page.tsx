@@ -1,49 +1,44 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Navigation from '@/components/Navigation';
-import CardInput from '@/components/CardInput';
-import CardDisplay from '@/components/CardDisplay';
-import FavoritesList from '@/components/FavoritesList';
-import ScryfallStatus from '@/components/ScryfallStatus';
-import CacheDebug from '@/components/CacheDebug';
-import { useAppStore } from '@/lib/store';
+import { useState, useEffect } from "react";
+import Navigation from "@/components/Navigation";
+import CardInput from "@/components/CardInput";
+import CardDisplay from "@/components/CardDisplay";
+import FavoritesList from "@/components/FavoritesList";
+import CacheDebug from "@/components/CacheDebug";
+import { useAppStore } from "@/lib/store";
 
-type View = 'input' | 'swipe' | 'favorites';
+type View = "input" | "swipe" | "favorites";
 
 export default function Home() {
   const { cardList, currentCardIndex } = useAppStore();
-  const [currentView, setCurrentView] = useState<View>('input');
+  const [currentView, setCurrentView] = useState<View>("input");
 
   // Auto-switch to completion view if we've finished swiping
   useEffect(() => {
     if (cardList.length > 0 && currentCardIndex >= cardList.length) {
-      setCurrentView('favorites');
+      setCurrentView("favorites");
     }
   }, [cardList.length, currentCardIndex]);
 
   const renderCurrentView = () => {
     switch (currentView) {
-      case 'input':
-        return <CardInput onCardsAdded={() => setCurrentView('swipe')} />;
-      case 'swipe':
+      case "input":
+        return <CardInput onCardsAdded={() => setCurrentView("swipe")} />;
+      case "swipe":
         return <CardDisplay />;
-      case 'favorites':
+      case "favorites":
         return <FavoritesList />;
       default:
-        return <CardInput onCardsAdded={() => setCurrentView('swipe')} />;
+        return <CardInput onCardsAdded={() => setCurrentView("swipe")} />;
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation currentView={currentView} onViewChange={setCurrentView} />
-      
-      <ScryfallStatus />
-      
-      <main className="max-w-4xl mx-auto py-8 px-4">
-        {renderCurrentView()}
-      </main>
+
+      <main className=" mx-auto py-8 px-4">{renderCurrentView()}</main>
 
       <CacheDebug />
     </div>

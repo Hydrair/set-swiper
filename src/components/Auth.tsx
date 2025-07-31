@@ -1,24 +1,30 @@
-'use client';
+"use client";
 
-import { useSession, signIn, signOut } from 'next-auth/react';
-import { LogIn, LogOut } from 'lucide-react';
-import { useAppStore } from '@/lib/store';
-import { useEffect } from 'react';
+import { useSession, signIn, signOut } from "next-auth/react";
+import { LogIn, LogOut } from "lucide-react";
+import { useAppStore } from "@/lib/store";
+import { useEffect } from "react";
+
+interface UserWithId {
+  id?: string;
+  name?: string | null;
+  email?: string | null;
+}
 
 export default function Auth() {
   const { data: session, status } = useSession();
   const { setUserId, clearUserData } = useAppStore();
 
   useEffect(() => {
-    if (session?.user && (session.user as any).id) {
-      setUserId((session.user as any).id);
-    } else if (status === 'unauthenticated') {
+    if (session?.user && (session.user as UserWithId).id) {
+      setUserId((session.user as UserWithId).id!);
+    } else if (status === "unauthenticated") {
       setUserId(null);
       clearUserData();
     }
   }, [session, status, setUserId, clearUserData]);
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
       <div className="flex items-center space-x-2">
         <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
@@ -55,4 +61,4 @@ export default function Auth() {
       </button>
     </div>
   );
-} 
+}

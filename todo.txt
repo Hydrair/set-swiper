@@ -1,0 +1,15 @@
+Phase 1 (Sofort):
+Dark Mode implementieren
+Karten-Details Modal
+Swipe-Historie
+Erweiterte Filter
+Phase 2 (Kurzfristig):
+Datenbank-Integration
+User-Profile erweitern
+Real-time Features
+Mobile Optimierung
+Phase 3 (Langfristig):
+Social Features
+KI-Recommendations
+Mobile App
+Advanced Analytics

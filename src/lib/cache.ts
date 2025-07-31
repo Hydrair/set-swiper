@@ -5,7 +5,7 @@ interface CacheEntry<T> {
 }
 
 class APICache {
-  private cache = new Map<string, CacheEntry<any>>();
+  private cache = new Map<string, CacheEntry<unknown>>();
   private readonly defaultTTL = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
   set<T>(key: string, data: T, ttl: number = this.defaultTTL): void {
@@ -30,19 +30,27 @@ class APICache {
   }
 
   has(key: string): boolean {
-    return this.get(key) !== null;
+    const entry = this.cache.get(key);
+    if (!entry) return false;
+
+    const isExpired = Date.now() - entry.timestamp > entry.ttl;
+    if (isExpired) {
+      this.cache.delete(key);
+      return false;
+    }
+
+    return true;
   }
 
-  delete(key: string): void {
-    this.cache.delete(key);
+  delete(key: string): boolean {
+    return this.cache.delete(key);
   }
 
   clear(): void {
     this.cache.clear();
   }
 
-  // Get cache statistics
-  getStats() {
+  getStats(): { size: number; keys: string[] } {
     return {
       size: this.cache.size,
       keys: Array.from(this.cache.keys()),
@@ -50,13 +58,11 @@ class APICache {
   }
 }
 
-// Create a singleton instance
 export const scryfallCache = new APICache();
 
-// Cache keys
 export const CACHE_KEYS = {
-  CARD: (name: string) => `card:${name.toLowerCase().trim()}`,
-  SETS: 'sets:all',
-  SET_CARDS: (setCode: string) => `set:${setCode.toLowerCase()}:cards`,
+  CARD_SEARCH: (cardName: string) => `card:${cardName.toLowerCase()}`,
+  SETS_LIST: 'sets:all',
   POPULAR_SETS: 'sets:popular',
+  SET_CARDS: (setCode: string) => `set:${setCode.toLowerCase()}`,
 } as const; 
