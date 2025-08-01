@@ -65,9 +65,9 @@ export default function FavoritesHeader({
             onClick={() => setShowSortDropdown(!showSortDropdown)}
             className="flex items-center px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
           >
-            <span>Sort: {currentSortLabel}</span>
+            <span className="hidden md:inline">Sort: {currentSortLabel}</span>
             <ChevronDown
-              className={`w-4 h-4 ml-1 transition-transform ${
+              className={`w-4 h-4 md:ml-1 transition-transform ${
                 showSortDropdown ? "rotate-180" : ""
               }`}
             />
@@ -96,15 +96,17 @@ export default function FavoritesHeader({
           onClick={onToggleView}
           className="flex items-center px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
         >
-          <Eye className="w-4 h-4 mr-2" />
-          {showImages ? "List View" : "Grid View"}
+          <Eye className="w-4 h-4 md:mr-2" />
+          <span className="hidden md:inline">
+            {showImages ? "List View" : "Grid View"}
+          </span>
         </button>
         <button
           onClick={onExport}
           className="flex items-center px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
         >
-          <Download className="w-4 h-4 mr-2" />
-          Export List
+          <Download className="w-4 h-4 md:mr-2" />
+          <span className="hidden md:inline">Export List</span>
         </button>
       </div>
     </div>

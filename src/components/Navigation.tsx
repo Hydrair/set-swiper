@@ -31,8 +31,8 @@ export default function Navigation({
                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                 }`}
               >
-                <Plus className="w-4 h-4 mr-1" />
-                Add Cards
+                <Plus className="w-4 h-4 md:mr-1" />
+                <span className="hidden md:inline">Add Cards</span>
               </button>
 
               <button
@@ -43,8 +43,8 @@ export default function Navigation({
                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                 }`}
               >
-                <GalleryVerticalEnd className="w-4 h-4 mr-1" />
-                Swipe
+                <GalleryVerticalEnd className="w-4 h-4 md:mr-1" />
+                <span className="hidden md:inline">Swipe</span>
               </button>
 
               <button
@@ -55,8 +55,8 @@ export default function Navigation({
                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                 }`}
               >
-                <Heart className="w-4 h-4 mr-1" />
-                Favorites
+                <Heart className="w-4 h-4 md:mr-1" />
+                <span className="hidden md:inline">Favorites</span>
                 {favorites.length > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {favorites.length}
