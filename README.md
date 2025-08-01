@@ -1,23 +1,21 @@
 # Set Swiper
 
-A Tinder-style web application for Magic: The Gathering cards built with React, Next.js, and NextAuth.js.
+A Tinder-style web application for Magic: The Gathering cards built with React and Next.js.
 
 ## Features
 
-- 🔐 **User Authentication**: Sign in with Google or demo credentials
 - 🃏 **Card Swiping**: Tinder-style interface for Magic cards
 - 📚 **Set Support**: Add entire Magic sets to your deck
 - ❤️ **Favorites**: Save and manage your favorite cards
 - 📊 **Sorting**: Sort cards by alphabetical, set number, mana value, or type
 - 📱 **Responsive**: Works on desktop and mobile devices
-- 💾 **Persistence**: User data is saved between sessions
+- 💾 **Persistence**: Data is saved locally between sessions
 
 ## Tech Stack
 
 - **Frontend**: React 19, Next.js 15, TypeScript
 - **Styling**: Tailwind CSS
 - **State Management**: Zustand
-- **Authentication**: NextAuth.js
 - **API**: Scryfall API for Magic card data
 - **Package Manager**: pnpm
 
@@ -25,64 +23,32 @@ A Tinder-style web application for Magic: The Gathering cards built with React, 
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - pnpm
 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
-   cd magic-card-tinder
+   cd set-swiper
    ```
 
 2. **Install dependencies**
+
    ```bash
    pnpm install
    ```
 
-3. **Set up environment variables**
-   
-   Create a `.env.local` file in the root directory:
-   ```env
-   # NextAuth.js Configuration
-   NEXTAUTH_URL=http://localhost:3000
-   NEXTAUTH_SECRET=your-secret-key-here-change-in-production
-   
-   # Google OAuth (Optional - for Google login)
-   GOOGLE_ID=your-google-client-id
-   GOOGLE_SECRET=your-google-client-secret
-   ```
+3. **Run the development server**
 
-4. **Generate a secret key**
-   ```bash
-   openssl rand -base64 32
-   ```
-   Use this as your `NEXTAUTH_SECRET`
-
-5. **Run the development server**
    ```bash
    pnpm dev
    ```
 
-6. **Open your browser**
+4. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
-
-## Authentication Setup
-
-### Demo Login
-The app includes a demo login for testing:
-- **Email**: `demo@example.com`
-- **Password**: `demo`
-
-### Google OAuth Setup (Optional)
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select an existing one
-3. Enable the Google+ API
-4. Go to "Credentials" and create an OAuth 2.0 Client ID
-5. Add `http://localhost:3000/api/auth/callback/google` to authorized redirect URIs
-6. Copy the Client ID and Client Secret to your `.env.local` file
 
 ## Usage
 
@@ -109,13 +75,10 @@ The app includes a demo login for testing:
 ```
 src/
 ├── app/                    # Next.js app directory
-│   ├── api/auth/          # NextAuth.js API routes
 │   ├── globals.css        # Global styles
 │   ├── layout.tsx         # Root layout
-│   ├── page.tsx           # Main page
-│   └── providers.tsx      # Session provider
+│   └── page.tsx           # Main page
 ├── components/            # React components
-│   ├── Auth.tsx          # Authentication component
 │   ├── CardDisplay.tsx   # Swiping interface
 │   ├── CardInput.tsx     # Card input forms
 │   ├── FavoritesList.tsx # Favorites management
@@ -152,5 +115,4 @@ This project is licensed under the MIT License.
 ## Acknowledgments
 
 - [Scryfall](https://scryfall.com/) for the Magic card API
-- [NextAuth.js](https://next-auth.js.org/) for authentication
 - [Tailwind CSS](https://tailwindcss.com/) for styling

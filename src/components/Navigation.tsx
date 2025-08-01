@@ -2,7 +2,6 @@
 
 import { Heart, Plus, GalleryVerticalEnd } from "lucide-react";
 import { useAppStore } from "@/lib/store";
-import Auth from "./Auth";
 import Logo from "./Logo";
 
 interface NavigationProps {
@@ -65,8 +64,6 @@ export default function Navigation({
                 )}
               </button>
             </div>
-
-            <Auth />
           </div>
         </div>
       </div>

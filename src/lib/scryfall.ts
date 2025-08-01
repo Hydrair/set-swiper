@@ -94,6 +94,7 @@ export async function getAllSets(): Promise<ScryfallSet[]> {
     const sets = data.data as ScryfallSet[];
 
     scryfallCache.set(cacheKey, sets, 24 * 60 * 60 * 1000); // 24 hour cache
+    console.log(sets);
     return sets;
   } catch (error) {
     console.error('Error fetching sets:', error);
@@ -120,17 +121,39 @@ export async function getSetCards(setCode: string): Promise<string[]> {
     const cached = scryfallCache.get<string[]>(cacheKey);
     if (cached) return cached;
 
-    const response = await fetch(`https://api.scryfall.com/sets/${setCode}/cards`);
+    const allCardNames: string[] = [];
+    let hasMore = true;
+    let page = 1;
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch set cards: ${response.status}`);
+    while (hasMore) {
+      const response = await fetch(
+        `${SCRYFALL_API_BASE}/cards/search?q=s:${setCode}&page=${page}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch set cards: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const cardNames = data.data.map((card: { name: string }) => card.name) as string[];
+
+      allCardNames.push(...cardNames);
+
+      // Check if there are more pages
+      hasMore = data.has_more;
+      page++;
+
+      // Add a small delay to respect rate limits
+      if (hasMore) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
     }
 
-    const data = await response.json();
-    const cardNames = data.data.map((card: { name: string }) => card.name) as string[];
+    // Remove duplicates (some cards might appear multiple times in a set)
+    const uniqueCardNames = [...new Set(allCardNames)];
 
-    scryfallCache.set(cacheKey, cardNames, 60 * 60 * 1000); // 1 hour cache
-    return cardNames;
+    scryfallCache.set(cacheKey, uniqueCardNames, 60 * 60 * 1000); // 1 hour cache
+    return uniqueCardNames;
   } catch (error) {
     console.error('Error fetching set cards:', error);
     throw new Error('Failed to load cards from this set. Please try again.');

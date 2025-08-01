@@ -79,25 +79,29 @@ export default function SetInput({ onCardsAdded }: SetInputProps) {
   );
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">
-        Add Cards by Set
-      </h2>
-      <div className="space-y-4">
-        <SortSelector />
+    <div className="w-full max-w-2xl mx-auto bg-white rounded-lg shadow-lg h-[calc(100vh-200px)] flex flex-col">
+      <div className="p-6 flex-shrink-0">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          Add Cards by Set
+        </h2>
+        <div className="space-y-4">
+          <SortSelector />
 
-        {/* Search Input */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search sets..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
+          {/* Search Input */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search sets..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border text-gray-700 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
         </div>
+      </div>
 
+      <div className="flex-1 overflow-y-auto min-h-0 px-6 pb-6">
         {isLoadingSets ? (
           <div className="flex items-center justify-center py-8">
             <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
@@ -142,7 +146,7 @@ export default function SetInput({ onCardsAdded }: SetInputProps) {
                 <h3 className="text-lg font-semibold text-gray-800 mb-3">
                   All Sets
                 </h3>
-                <div className="max-h-96 overflow-y-auto space-y-2">
+                <div className="space-y-2">
                   {filteredSets.map((set) => (
                     <button
                       key={set.code}
@@ -179,7 +183,7 @@ export default function SetInput({ onCardsAdded }: SetInputProps) {
         )}
       </div>
 
-      <div className="mt-4 text-sm text-gray-600">
+      <div className="p-6 flex-shrink-0 text-sm text-gray-600">
         <p className="mb-2">
           <strong>Tips:</strong>
         </p>

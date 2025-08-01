@@ -12,15 +12,14 @@ export const useAppStore = create<AppState>()(
       isLoading: false,
       error: null,
       sortBy: 'alphabetical',
-      userId: null,
 
       // Actions
       addCards: (cardNames: string[]) => {
         const cleanNames = cardNames
           .map(name => name.trim())
           .filter(name => name.length > 0);
-        
-        set({ 
+
+        set({
           cardList: cleanNames,
           currentCardIndex: 0,
           error: null
@@ -30,7 +29,7 @@ export const useAppStore = create<AppState>()(
       removeCard: (index: number) => {
         const { cardList } = get();
         const newList = cardList.filter((_, i) => i !== index);
-        set({ 
+        set({
           cardList: newList,
           currentCardIndex: Math.min(get().currentCardIndex, newList.length - 1)
         });
@@ -52,8 +51,8 @@ export const useAppStore = create<AppState>()(
 
       removeFromFavorites: (cardId: string) => {
         const { favorites } = get();
-        set({ 
-          favorites: favorites.filter(card => card.id !== cardId) 
+        set({
+          favorites: favorites.filter(card => card.id !== cardId)
         });
       },
 
@@ -72,28 +71,14 @@ export const useAppStore = create<AppState>()(
       setSortBy: (sortBy: 'alphabetical' | 'setNumber' | 'manaValue' | 'type') => {
         set({ sortBy });
       },
-
-      setUserId: (userId: string | null) => {
-        set({ userId });
-      },
-
-      clearUserData: () => {
-        set({ 
-          cardList: [],
-          currentCardIndex: 0,
-          favorites: [],
-          userId: null
-        });
-      },
     }),
     {
-      name: 'magic-card-tinder-storage',
+      name: 'set-swiper-storage',
       partialize: (state) => ({
         cardList: state.cardList,
         currentCardIndex: state.currentCardIndex,
         favorites: state.favorites,
         sortBy: state.sortBy,
-        userId: state.userId,
       }),
     }
   )
