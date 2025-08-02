@@ -1,0 +1,21 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="64" fill="#3b82f6"/>
+  
+  <!-- Star pattern representing Magic cards -->
+  <g fill="white">
+    <!-- Center star -->
+    <path d="M256 96L288 192L384 192L304 256L336 352L256 288L176 352L208 256L128 192L224 192L256 96Z"/>
+    
+    <!-- Top left star -->
+    <path d="M128 128L144 160L176 160L152 176L160 208L128 192L96 208L104 176L80 160L112 160L128 128Z"/>
+    
+    <!-- Top right star -->
+    <path d="M384 128L400 160L432 160L408 176L416 208L384 192L352 208L360 176L336 160L368 160L384 128Z"/>
+    
+    <!-- Bottom left star -->
+    <path d="M128 384L144 416L176 416L152 432L160 464L128 448L96 464L104 432L80 416L112 416L128 384Z"/>
+    
+    <!-- Bottom right star -->
+    <path d="M384 384L400 416L432 416L408 432L416 464L384 448L352 464L360 432L336 416L368 416L384 384Z"/>
+  </g>
+</svg> 

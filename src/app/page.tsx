@@ -6,6 +6,7 @@ import CardInput from "@/components/CardInput";
 import CardDisplay from "@/components/CardDisplay";
 import FavoritesList from "@/components/FavoritesList";
 import CacheDebug from "@/components/CacheDebug";
+import InstallButton from "@/components/InstallButton";
 import { useAppStore } from "@/lib/store";
 
 type View = "input" | "swipe" | "favorites";
@@ -41,6 +42,7 @@ export default function Home() {
       <main className="mx-auto py-4 md:py-8 px-4">{renderCurrentView()}</main>
 
       <CacheDebug />
+      <InstallButton />
     </div>
   );
 }
