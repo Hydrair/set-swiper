@@ -62,15 +62,15 @@ export default function ScryfallSearch({ onCardsAdded }: ScryfallSearchProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">
+    <div className="bg-theme-card rounded-lg shadow-theme-lg p-6">
+      <h2 className="text-2xl font-bold text-theme-primary mb-4">
         Search with Scryfall Syntax
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label
             htmlFor="searchQuery"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-sm font-medium text-theme-secondary mb-2"
           >
             Enter Scryfall search query:
           </label>
@@ -79,7 +79,7 @@ export default function ScryfallSearch({ onCardsAdded }: ScryfallSearchProps) {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+            className="w-full px-3 py-2 border border-theme-primary rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-theme-primary bg-theme-input"
             placeholder="e.g., c:red pow=3, c:blue t:instant"
             disabled={isLoading}
           />
@@ -96,38 +96,40 @@ export default function ScryfallSearch({ onCardsAdded }: ScryfallSearchProps) {
         </button>
       </form>
 
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-        <h3 className="text-lg font-semibold text-blue-900 mb-3">
+      <div className="mt-6 p-4 bg-theme-accent rounded-lg">
+        <h3 className="text-lg font-semibold text-theme-accent mb-3">
           Scryfall Search Syntax Examples:
         </h3>
-        <div className="space-y-2 text-sm text-blue-800">
+        <div className="space-y-2 text-sm text-theme-accent">
           <div>
             <strong>Color:</strong>{" "}
-            <code className="bg-blue-100 px-1 rounded">c:red</code> (red cards),{" "}
-            <code className="bg-blue-100 px-1 rounded">c:u</code> (blue cards)
+            <code className="bg-theme-accent px-1 rounded">c:red</code> (red
+            cards), <code className="bg-theme-accent px-1 rounded">c:u</code>{" "}
+            (blue cards)
           </div>
           <div>
             <strong>Power/Toughness:</strong>{" "}
-            <code className="bg-blue-100 px-1 rounded">pow=3</code> (power 3),{" "}
-            <code className="bg-blue-100 px-1 rounded">tou&gt;5</code>{" "}
+            <code className="bg-theme-accent px-1 rounded">pow=3</code> (power
+            3), <code className="bg-theme-accent px-1 rounded">tou&gt;5</code>{" "}
             (toughness &gt;5)
           </div>
           <div>
             <strong>Type:</strong>{" "}
-            <code className="bg-blue-100 px-1 rounded">t:instant</code>{" "}
+            <code className="bg-theme-accent px-1 rounded">t:instant</code>{" "}
             (instants),{" "}
-            <code className="bg-blue-100 px-1 rounded">t:creature</code>{" "}
+            <code className="bg-theme-accent px-1 rounded">t:creature</code>{" "}
             (creatures)
           </div>
           <div>
             <strong>Rarity:</strong>{" "}
-            <code className="bg-blue-100 px-1 rounded">r:rare</code> (rare
-            cards), <code className="bg-blue-100 px-1 rounded">r:mythic</code>{" "}
+            <code className="bg-theme-accent px-1 rounded">r:rare</code> (rare
+            cards),{" "}
+            <code className="bg-theme-accent px-1 rounded">r:mythic</code>{" "}
             (mythic cards)
           </div>
           <div>
             <strong>Combined:</strong>{" "}
-            <code className="bg-blue-100 px-1 rounded">
+            <code className="bg-theme-accent px-1 rounded">
               c:red pow=3 t:creature
             </code>{" "}
             (red creatures with power 3)
@@ -137,7 +139,7 @@ export default function ScryfallSearch({ onCardsAdded }: ScryfallSearchProps) {
               href="https://scryfall.com/docs/syntax"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 underline"
+              className="text-theme-accent hover:text-theme-accent underline"
             >
               View full Scryfall syntax guide →
             </a>

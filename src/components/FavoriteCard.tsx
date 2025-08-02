@@ -17,8 +17,8 @@ export default function FavoriteCard({
 }: FavoriteCardProps) {
   if (showImage) {
     return (
-      <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:shadow-md transition-shadow w-50 h-80">
-        <div className="relative aspect-[745/1040] mb-3 rounded-lg overflow-hidden bg-gray-100 hover:scale-105 transition-all duration-300">
+      <div className="bg-theme-secondary rounded-lg p-4 border border-theme-primary hover:shadow-theme-md transition-shadow w-50 h-80">
+        <div className="relative aspect-[745/1040] mb-3 rounded-lg overflow-hidden bg-theme-tertiary hover:scale-105 transition-all duration-300">
           <Image
             src={card.imageUrl}
             alt={card.name}
@@ -30,7 +30,7 @@ export default function FavoriteCard({
         <div className="flex justify-between items-start">
           <div className="flex-1 min-w-0">
             <h3
-              className="font-semibold text-gray-800 mb-1 line-clamp-2"
+              className="font-semibold text-theme-primary mb-1 line-clamp-2"
               title={card.name}
             >
               {card.name}
@@ -39,13 +39,15 @@ export default function FavoriteCard({
           <div className="flex flex-col items-end">
             <button
               onClick={() => onRemove(card.id)}
-              className="p-1 text-gray-400 hover:text-red-500 transition-colors flex-shrink-0"
+              className="p-1 text-theme-tertiary hover:text-red-500 transition-colors flex-shrink-0"
               aria-label="Remove from favorites"
             >
               <Trash2 className="w-4 h-4" />
             </button>
             {card.setNumber && (
-              <p className="text-xs text-gray-500 mt-1">#{card.setNumber}</p>
+              <p className="text-xs text-theme-tertiary mt-1">
+                #{card.setNumber}
+              </p>
             )}
           </div>
         </div>
@@ -54,15 +56,15 @@ export default function FavoriteCard({
   }
 
   return (
-    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
+    <div className="flex items-center justify-between p-4 bg-theme-secondary rounded-lg border border-theme-primary hover:shadow-theme-md transition-shadow">
       <div className="flex-1 min-w-0">
         <h3
-          className="font-semibold text-gray-800 mb-1 line-clamp-2"
+          className="font-semibold text-theme-primary mb-1 line-clamp-2"
           title={card.name}
         >
           {card.name}
         </h3>
-        <div className="flex items-center space-x-4 text-sm text-gray-600">
+        <div className="flex items-center space-x-4 text-sm text-theme-secondary">
           {card.manaCost && <span>Mana: {card.manaCost}</span>}
           {card.type && <span>Type: {card.type}</span>}
           {card.setNumber && <span>Set #: {card.setNumber}</span>}
@@ -71,7 +73,7 @@ export default function FavoriteCard({
       </div>
       <button
         onClick={() => onRemove(card.id)}
-        className="ml-4 p-2 text-gray-400 hover:text-red-500 transition-colors flex-shrink-0"
+        className="ml-4 p-2 text-theme-tertiary hover:text-red-500 transition-colors flex-shrink-0"
         aria-label="Remove from favorites"
       >
         <Trash2 className="w-5 h-5" />

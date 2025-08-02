@@ -54,13 +54,13 @@ export default function CardInput({ onCardsAdded }: CardInputProps) {
     <div className="w-full max-w-2xl mx-auto">
       {/* Tabs */}
       <div className="mb-6">
-        <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
+        <div className="flex space-x-1 bg-theme-tertiary rounded-lg p-1">
           <button
             onClick={() => setInputMethod("individual")}
             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
               inputMethod === "individual"
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-gray-600 hover:text-gray-900"
+                ? "bg-theme-card text-theme-primary shadow-theme-sm"
+                : "text-theme-secondary hover:text-theme-primary"
             }`}
           >
             Individual Cards
@@ -69,8 +69,8 @@ export default function CardInput({ onCardsAdded }: CardInputProps) {
             onClick={() => setInputMethod("set")}
             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
               inputMethod === "set"
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-gray-600 hover:text-gray-900"
+                ? "bg-theme-card text-theme-primary shadow-theme-sm"
+                : "text-theme-secondary hover:text-theme-primary"
             }`}
           >
             By Set
@@ -79,8 +79,8 @@ export default function CardInput({ onCardsAdded }: CardInputProps) {
             onClick={() => setInputMethod("search")}
             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
               inputMethod === "search"
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-gray-600 hover:text-gray-900"
+                ? "bg-theme-card text-theme-primary shadow-theme-sm"
+                : "text-theme-secondary hover:text-theme-primary"
             }`}
           >
             Search
@@ -89,15 +89,15 @@ export default function CardInput({ onCardsAdded }: CardInputProps) {
       </div>
 
       {inputMethod === "individual" ? (
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        <div className="bg-theme-card rounded-lg shadow-theme-lg p-6">
+          <h2 className="text-2xl font-bold text-theme-primary mb-4">
             Add Your Magic Cards
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label
                 htmlFor="cardInput"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-sm font-medium text-theme-secondary mb-2"
               >
                 Enter card names (one per line):
               </label>
@@ -105,7 +105,7 @@ export default function CardInput({ onCardsAdded }: CardInputProps) {
                 id="cardInput"
                 value={cardInput}
                 onChange={(e) => setCardInput(e.target.value)}
-                className="w-full h-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none text-gray-700"
+                className="w-full h-32 px-3 py-2 border border-theme-primary rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none text-theme-primary bg-theme-input"
                 placeholder="Lightning Bolt&#10;Counterspell&#10;Black Lotus&#10;..."
                 disabled={isLoading}
               />
@@ -122,7 +122,7 @@ export default function CardInput({ onCardsAdded }: CardInputProps) {
             </button>
           </form>
 
-          <div className="mt-4 text-sm text-gray-600">
+          <div className="mt-4 text-sm text-theme-tertiary">
             <p className="mb-2">
               <strong>Tips:</strong>
             </p>

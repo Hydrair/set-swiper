@@ -79,9 +79,9 @@ export default function SetInput({ onCardsAdded }: SetInputProps) {
   );
 
   return (
-    <div className="w-full max-w-2xl mx-auto bg-white rounded-lg shadow-lg h-[calc(100vh-200px)] min-h-[600px] flex flex-col">
+    <div className="w-full max-w-2xl mx-auto bg-theme-card rounded-lg shadow-theme-lg h-[calc(100vh-200px)] min-h-[600px] flex flex-col">
       <div className="p-6 flex-shrink-0">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        <h2 className="text-2xl font-bold text-theme-primary mb-4">
           Add Cards by Set
         </h2>
         <div className="space-y-4">
@@ -89,13 +89,13 @@ export default function SetInput({ onCardsAdded }: SetInputProps) {
 
           {/* Search Input */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-theme-tertiary" />
             <input
               type="text"
               placeholder="Search sets..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border text-gray-700 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2 border text-theme-primary border-theme-primary rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-theme-input"
             />
           </div>
         </div>
@@ -105,14 +105,14 @@ export default function SetInput({ onCardsAdded }: SetInputProps) {
         {isLoadingSets ? (
           <div className="flex items-center justify-center py-8">
             <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
-            <span className="ml-2 text-gray-600">Loading sets...</span>
+            <span className="ml-2 text-theme-secondary">Loading sets...</span>
           </div>
         ) : (
           <div className="space-y-6">
             {/* Popular Sets */}
             {filteredPopularSets.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                <h3 className="text-lg font-semibold text-theme-primary mb-3">
                   Popular Sets
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -121,13 +121,13 @@ export default function SetInput({ onCardsAdded }: SetInputProps) {
                       key={set.code}
                       onClick={() => handleSetClick(set.code)}
                       disabled={isLoading}
-                      className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 transition-colors"
+                      className="flex items-center justify-between p-3 border border-theme-primary rounded-lg hover:bg-theme-button focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 transition-colors"
                     >
                       <div className="text-left">
-                        <div className="font-medium text-gray-900">
+                        <div className="font-medium text-theme-primary">
                           {set.name}
                         </div>
-                        <div className="text-sm text-gray-600">
+                        <div className="text-sm text-theme-secondary">
                           {set.code.toUpperCase()} • {set.card_count} cards
                         </div>
                       </div>
@@ -143,7 +143,7 @@ export default function SetInput({ onCardsAdded }: SetInputProps) {
             {/* All Sets */}
             {filteredSets.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                <h3 className="text-lg font-semibold text-theme-primary mb-3">
                   All Sets
                 </h3>
                 <div className="space-y-2">
@@ -152,13 +152,13 @@ export default function SetInput({ onCardsAdded }: SetInputProps) {
                       key={set.code}
                       onClick={() => handleSetClick(set.code)}
                       disabled={isLoading}
-                      className="w-full flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 transition-colors"
+                      className="w-full flex items-center justify-between p-3 border border-theme-primary rounded-lg hover:bg-theme-button focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 transition-colors"
                     >
                       <div className="text-left">
-                        <div className="font-medium text-gray-900">
+                        <div className="font-medium text-theme-primary">
                           {set.name}
                         </div>
-                        <div className="text-sm text-gray-600">
+                        <div className="text-sm text-theme-secondary">
                           {set.code.toUpperCase()} • {set.card_count} cards •{" "}
                           {new Date(set.released_at).getFullYear()}
                         </div>
@@ -175,7 +175,7 @@ export default function SetInput({ onCardsAdded }: SetInputProps) {
             {filteredSets.length === 0 &&
               filteredPopularSets.length === 0 &&
               searchTerm && (
-                <div className="text-center py-8 text-gray-600">
+                <div className="text-center py-8 text-theme-tertiary">
                   No sets found matching &quot;{searchTerm}&quot;
                 </div>
               )}
@@ -183,7 +183,7 @@ export default function SetInput({ onCardsAdded }: SetInputProps) {
         )}
       </div>
 
-      <div className="p-6 flex-shrink-0 text-sm text-gray-600">
+      <div className="p-6 flex-shrink-0 text-sm text-theme-tertiary">
         <p className="mb-2">
           <strong>Tips:</strong>
         </p>

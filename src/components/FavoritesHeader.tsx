@@ -55,7 +55,7 @@ export default function FavoritesHeader({
 
   return (
     <div className="flex justify-between items-center mb-6 flex-shrink-0">
-      <h2 className="text-2xl font-bold text-gray-800">
+      <h2 className="text-2xl font-bold text-theme-primary">
         Your Favorites ({favoritesCount})
       </h2>
       <div className="flex space-x-2">
@@ -63,7 +63,7 @@ export default function FavoritesHeader({
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setShowSortDropdown(!showSortDropdown)}
-            className="flex items-center px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+            className="flex items-center px-3 py-2 text-sm bg-theme-button text-theme-secondary rounded-md hover:bg-theme-button-hover focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
           >
             <span className="hidden md:inline">Sort: {currentSortLabel}</span>
             <ChevronDown
@@ -74,15 +74,15 @@ export default function FavoritesHeader({
           </button>
 
           {showSortDropdown && (
-            <div className="absolute z-10 right-0 mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
+            <div className="absolute z-10 right-0 mt-1 w-48 bg-theme-card border border-theme-primary rounded-md shadow-theme-lg">
               {sortOptions.map((option) => (
                 <button
                   key={option.value}
                   onClick={() => handleSortChange(option.value)}
-                  className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors ${
+                  className={`w-full text-left px-3 py-2 text-sm hover:bg-theme-button focus:outline-none focus:bg-theme-button transition-colors ${
                     sortBy === option.value
-                      ? "bg-blue-50 text-blue-700"
-                      : "text-gray-700"
+                      ? "bg-theme-accent text-theme-accent"
+                      : "text-theme-primary"
                   }`}
                 >
                   {option.label}
@@ -94,7 +94,7 @@ export default function FavoritesHeader({
 
         <button
           onClick={onToggleView}
-          className="flex items-center px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+          className="flex items-center px-3 py-2 text-sm bg-theme-button text-theme-secondary rounded-md hover:bg-theme-button-hover focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
         >
           <Eye className="w-4 h-4 md:mr-2" />
           <span className="hidden md:inline">

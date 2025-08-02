@@ -20,9 +20,9 @@ export default function Logo() {
           fill="currentColor"
         />
       </svg>
-      <span className="ml-2 text-xl font-bold text-gray-900">
+      <span className="ml-2 text-xl font-bold text-theme-primary">
         Set Swiper
       </span>
     </div>
   );
-} 
+}

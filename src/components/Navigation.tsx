@@ -3,6 +3,7 @@
 import { Heart, Plus, GalleryVerticalEnd } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import Logo from "./Logo";
+import ThemeToggle from "./ThemeToggle";
 
 interface NavigationProps {
   currentView: "input" | "swipe" | "favorites";
@@ -16,7 +17,7 @@ export default function Navigation({
   const { favorites } = useAppStore();
 
   return (
-    <nav className="bg-white shadow-sm border-b">
+    <nav className="bg-theme-nav shadow-theme-sm border-b border-theme-primary">
       <div className="max-w-4xl mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           <button
@@ -27,14 +28,14 @@ export default function Navigation({
             <Logo />
           </button>
 
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-4">
             <div className="flex space-x-1">
               <button
                 onClick={() => onViewChange("input")}
                 className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   currentView === "input"
-                    ? "bg-blue-100 text-blue-700"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                    ? "bg-theme-accent text-theme-accent"
+                    : "text-theme-secondary hover:text-theme-primary hover:bg-theme-button"
                 }`}
               >
                 <Plus className="w-4 h-4 md:mr-1" />
@@ -45,8 +46,8 @@ export default function Navigation({
                 onClick={() => onViewChange("swipe")}
                 className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   currentView === "swipe"
-                    ? "bg-blue-100 text-blue-700"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                    ? "bg-theme-accent text-theme-accent"
+                    : "text-theme-secondary hover:text-theme-primary hover:bg-theme-button"
                 }`}
               >
                 <GalleryVerticalEnd className="w-4 h-4 md:mr-1" />
@@ -57,8 +58,8 @@ export default function Navigation({
                 onClick={() => onViewChange("favorites")}
                 className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors relative ${
                   currentView === "favorites"
-                    ? "bg-blue-100 text-blue-700"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                    ? "bg-theme-accent text-theme-accent"
+                    : "text-theme-secondary hover:text-theme-primary hover:bg-theme-button"
                 }`}
               >
                 <Heart className="w-4 h-4 md:mr-1" />
@@ -70,6 +71,7 @@ export default function Navigation({
                 )}
               </button>
             </div>
+            <ThemeToggle />
           </div>
         </div>
       </div>

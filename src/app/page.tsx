@@ -35,10 +35,10 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-theme-primary">
       <Navigation currentView={currentView} onViewChange={setCurrentView} />
 
-      <main className=" mx-auto py-4 md:py-8 px-4">{renderCurrentView()}</main>
+      <main className="mx-auto py-4 md:py-8 px-4">{renderCurrentView()}</main>
 
       <CacheDebug />
     </div>

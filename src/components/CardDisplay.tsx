@@ -119,7 +119,7 @@ export default function CardDisplay() {
 
       {/* Error display */}
       {error && (
-        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
+        <div className="mb-4 p-3 bg-theme-error border border-theme-error text-theme-error rounded-md">
           {error}
         </div>
       )}
@@ -131,16 +131,16 @@ export default function CardDisplay() {
           id="card-placeholder"
           className="relative w-full max-w-[280px] md:max-w-xs my-4"
         >
-          <div className="relative bg-gray-200 rounded-lg shadow-md overflow-hidden opacity-60">
-            <div className="aspect-[745/1040] flex items-center justify-center bg-gray-300">
-              <div className="text-center text-gray-500">
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-gray-400 rounded-full mx-auto mb-2"></div>
+          <div className="relative bg-theme-tertiary rounded-lg shadow-theme-md overflow-hidden opacity-60">
+            <div className="aspect-[745/1040] flex items-center justify-center bg-theme-secondary">
+              <div className="text-center text-theme-tertiary">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-theme-secondary rounded-full mx-auto mb-2"></div>
                 <p className="text-xs md:text-sm">Next card</p>
               </div>
             </div>
             <div className="p-2 md:p-3">
-              <div className="h-3 md:h-4 bg-gray-300 rounded mb-1"></div>
-              <div className="h-2 md:h-3 bg-gray-300 rounded w-2/3"></div>
+              <div className="h-3 md:h-4 bg-theme-secondary rounded mb-1"></div>
+              <div className="h-2 md:h-3 bg-theme-secondary rounded w-2/3"></div>
             </div>
           </div>
         </div>
@@ -160,9 +160,9 @@ export default function CardDisplay() {
           ) : (
             <div
               id="no-card"
-              className="aspect-[745/1040] flex items-center justify-center bg-gray-100 rounded-lg"
+              className="aspect-[745/1040] flex items-center justify-center bg-theme-secondary rounded-lg"
             >
-              <p className="text-gray-600">No card to display</p>
+              <p className="text-theme-secondary">No card to display</p>
             </div>
           )}
         </div>

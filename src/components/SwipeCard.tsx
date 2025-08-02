@@ -21,11 +21,11 @@ export default function SwipeCard({
     return (
       <div
         id="loading-card"
-        className="aspect-[745/1040] flex items-center justify-center bg-gray-100 rounded-lg"
+        className="aspect-[745/1040] flex items-center justify-center bg-theme-secondary rounded-lg"
       >
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
-          <p className="text-gray-600">Loading card...</p>
+          <p className="text-theme-secondary">Loading card...</p>
         </div>
       </div>
     );
@@ -41,7 +41,7 @@ export default function SwipeCard({
     >
       <div
         id="swipeable-card"
-        className="relative bg-white rounded-lg shadow-lg overflow-hidden cursor-grab active:cursor-grabbing select-none"
+        className="relative bg-theme-card rounded-lg shadow-theme-lg overflow-hidden cursor-grab active:cursor-grabbing select-none"
         onDragStart={(e) => e.preventDefault()}
       >
         <div className="relative aspect-[745/1040]">
@@ -58,15 +58,17 @@ export default function SwipeCard({
         </div>
 
         <div className="p-2 md:p-3">
-          <h3 className="text-sm md:text-base font-semibold text-gray-800 mb-1">
+          <h3 className="text-sm md:text-base font-semibold text-theme-primary mb-1">
             {card.name}
           </h3>
           {card.manaCost && (
-            <p className="text-xs text-gray-600 mb-1">
+            <p className="text-xs text-theme-secondary mb-1">
               Mana Cost: {card.manaCost}
             </p>
           )}
-          {card.type && <p className="text-xs text-gray-600">{card.type}</p>}
+          {card.type && (
+            <p className="text-xs text-theme-secondary">{card.type}</p>
+          )}
         </div>
       </div>
     </TinderCard>

@@ -46,7 +46,7 @@ export default function FavoritesList() {
   return (
     <div
       id="favorites-list"
-      className="w-full max-w-full mx-auto p-6 bg-white rounded-lg shadow-lg h-[calc(100vh-100px)] flex flex-col"
+      className="w-full max-w-full mx-auto p-6 bg-theme-card rounded-lg shadow-theme-lg h-[calc(100vh-100px)] flex flex-col"
     >
       <FavoritesHeader
         favoritesCount={favorites.length}

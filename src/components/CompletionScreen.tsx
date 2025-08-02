@@ -14,21 +14,21 @@ export default function CompletionScreen({
   onRestart,
 }: CompletionScreenProps) {
   return (
-    <div className="w-full max-w-md mx-auto p-8 bg-white rounded-lg shadow-lg text-center">
+    <div className="w-full max-w-md mx-auto p-8 bg-theme-card rounded-lg shadow-theme-lg text-center">
       <div className="mb-6">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Heart className="w-8 h-8 text-green-600" />
+        <div className="w-16 h-16 bg-theme-success rounded-full flex items-center justify-center mx-auto mb-4">
+          <Heart className="w-8 h-8 text-theme-success" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+        <h2 className="text-2xl font-bold text-theme-primary mb-2">
           You&apos;ve completed your deck!
         </h2>
-        <p className="text-gray-600">
+        <p className="text-theme-secondary">
           You&apos;ve swiped through all {totalCards} cards.
         </p>
       </div>
 
       <div className="space-y-3">
-        <p className="text-lg font-semibold text-gray-700">
+        <p className="text-lg font-semibold text-theme-primary">
           Favorites: {favoritesCount} cards
         </p>
         <button
