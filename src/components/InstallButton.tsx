@@ -29,8 +29,11 @@ export default function InstallButton() {
   }, []);
 
   const handleInstallClick = () => {
-    if (typeof window !== "undefined" && (window as any).showInstallPrompt) {
-      (window as any).showInstallPrompt();
+    if (
+      typeof window !== "undefined" &&
+      (window as { showInstallPrompt?: () => void }).showInstallPrompt
+    ) {
+      (window as { showInstallPrompt?: () => void }).showInstallPrompt?.();
       setShowInstallButton(false);
     }
   };

@@ -5,8 +5,6 @@ export const metadata: Metadata = {
   title: "Set Swiper",
   description: "Swipe through Magic cards and build your favorites list",
   manifest: "/manifest.json",
-  themeColor: "#3b82f6",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -26,6 +24,13 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#3b82f6",
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -43,7 +48,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
-        <script src="/pwa-register.js" />
+        <script src="/pwa-register.js" async />
       </body>
     </html>
   );

@@ -43,7 +43,7 @@ export default function CardInput({ onCardsAdded }: CardInputProps) {
       addCards(cardNames);
       setCardInput("");
       onCardsAdded();
-    } catch (error) {
+    } catch (_error) {
       setError("Failed to add cards. Please try again.");
     } finally {
       setIsLoading(false);
