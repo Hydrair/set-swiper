@@ -79,7 +79,7 @@ export default function SetInput({ onCardsAdded }: SetInputProps) {
   );
 
   return (
-    <div className="w-full max-w-2xl mx-auto bg-white rounded-lg shadow-lg h-[calc(100vh-200px)] flex flex-col">
+    <div className="w-full max-w-2xl mx-auto bg-white rounded-lg shadow-lg h-[calc(100vh-200px)] min-h-[600px] flex flex-col">
       <div className="p-6 flex-shrink-0">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">
           Add Cards by Set

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAppStore } from "@/lib/store";
 import SetInput from "./SetInput";
+import ScryfallSearch from "./ScryfallSearch";
 import SortSelector from "./SortSelector";
 
 interface CardInputProps {
@@ -11,9 +12,9 @@ interface CardInputProps {
 
 export default function CardInput({ onCardsAdded }: CardInputProps) {
   const { addCards, setError } = useAppStore();
-  const [inputMethod, setInputMethod] = useState<"individual" | "set">(
-    "individual"
-  );
+  const [inputMethod, setInputMethod] = useState<
+    "individual" | "set" | "search"
+  >("individual");
   const [cardInput, setCardInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -74,6 +75,16 @@ export default function CardInput({ onCardsAdded }: CardInputProps) {
           >
             By Set
           </button>
+          <button
+            onClick={() => setInputMethod("search")}
+            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+              inputMethod === "search"
+                ? "bg-white text-gray-900 shadow-sm"
+                : "text-gray-600 hover:text-gray-900"
+            }`}
+          >
+            Search
+          </button>
         </div>
       </div>
 
@@ -123,8 +134,10 @@ export default function CardInput({ onCardsAdded }: CardInputProps) {
             </ul>
           </div>
         </div>
-      ) : (
+      ) : inputMethod === "set" ? (
         <SetInput onCardsAdded={onCardsAdded} />
+      ) : (
+        <ScryfallSearch onCardsAdded={onCardsAdded} />
       )}
     </div>
   );

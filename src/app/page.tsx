@@ -38,7 +38,7 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50">
       <Navigation currentView={currentView} onViewChange={setCurrentView} />
 
-      <main className=" mx-auto py-8 px-4">{renderCurrentView()}</main>
+      <main className=" mx-auto py-4 md:py-8 px-4">{renderCurrentView()}</main>
 
       <CacheDebug />
     </div>

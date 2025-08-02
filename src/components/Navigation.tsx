@@ -19,7 +19,13 @@ export default function Navigation({
     <nav className="bg-white shadow-sm border-b">
       <div className="max-w-4xl mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
-          <Logo />
+          <button
+            onClick={() => onViewChange("input")}
+            className="hover:opacity-80 transition-opacity cursor-pointer"
+            aria-label="Go to Add Cards"
+          >
+            <Logo />
+          </button>
 
           <div className="flex items-center space-x-6">
             <div className="flex space-x-1">

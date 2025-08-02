@@ -127,17 +127,20 @@ export default function CardDisplay() {
       {/* Card display - centered in available space */}
       <div className="flex items-center justify-center px-4 relative flex-1">
         {/* Placeholder card behind the main card */}
-        <div id="card-placeholder" className="relative w-full max-w-xs my-4">
+        <div
+          id="card-placeholder"
+          className="relative w-full max-w-[280px] md:max-w-xs my-4"
+        >
           <div className="relative bg-gray-200 rounded-lg shadow-md overflow-hidden opacity-60">
             <div className="aspect-[745/1040] flex items-center justify-center bg-gray-300">
               <div className="text-center text-gray-500">
-                <div className="w-16 h-16 bg-gray-400 rounded-full mx-auto mb-2"></div>
-                <p className="text-sm">Next card</p>
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gray-400 rounded-full mx-auto mb-2"></div>
+                <p className="text-xs md:text-sm">Next card</p>
               </div>
             </div>
-            <div className="p-3">
-              <div className="h-4 bg-gray-300 rounded mb-1"></div>
-              <div className="h-3 bg-gray-300 rounded w-2/3"></div>
+            <div className="p-2 md:p-3">
+              <div className="h-3 md:h-4 bg-gray-300 rounded mb-1"></div>
+              <div className="h-2 md:h-3 bg-gray-300 rounded w-2/3"></div>
             </div>
           </div>
         </div>
@@ -145,7 +148,7 @@ export default function CardDisplay() {
         {/* Main card */}
         <div
           id="main-card"
-          className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-xs z-10"
+          className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-[280px] md:max-w-xs z-10"
         >
           {currentCard ? (
             <SwipeCard
@@ -166,27 +169,27 @@ export default function CardDisplay() {
       </div>
 
       {/* Bottom section with instructions and buttons */}
-      <div className="mt-auto pt-6">
+      <div className="mt-auto pt-4 md:pt-6 pb-4">
         {/* Swipe/Click buttons */}
-        <div className="mb-4 flex justify-center space-x-12">
+        <div className="mb-4 flex justify-center space-x-8 md:space-x-12">
           <button
             id="skip-button"
             onClick={handleSwipeLeft}
             disabled={isLoadingCard}
-            className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 transition-colors"
+            className="w-14 h-14 md:w-16 md:h-16 bg-red-100 rounded-full flex items-center justify-center hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 transition-colors"
             aria-label="Skip card"
           >
-            <X className="w-8 h-8 text-red-600" />
+            <X className="w-6 h-6 md:w-8 md:h-8 text-red-600" />
           </button>
 
           <button
             id="like-button"
             onClick={handleSwipeRight}
             disabled={isLoadingCard}
-            className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 transition-colors"
+            className="w-14 h-14 md:w-16 md:h-16 bg-green-100 rounded-full flex items-center justify-center hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 transition-colors"
             aria-label="Like card"
           >
-            <Heart className="w-8 h-8 text-green-600" />
+            <Heart className="w-6 h-6 md:w-8 md:h-8 text-green-600" />
           </button>
         </div>
       </div>

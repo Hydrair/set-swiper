@@ -29,6 +29,9 @@ export async function searchCard(cardName: string): Promise<MagicCard | null> {
     const cached = scryfallCache.get<MagicCard>(cacheKey);
     if (cached) return cached;
 
+    // Add delay to respect rate limits
+    await new Promise((resolve) => setTimeout(resolve, 75));
+
     const response = await fetch(`${SCRYFALL_API_BASE}/cards/named?fuzzy=${encodeURIComponent(cardName)}`);
 
     if (!response.ok) {
@@ -66,7 +69,7 @@ export async function searchMultipleCards(cardNames: string[]): Promise<MagicCar
   for (const name of cardNames) {
     // Add delay to respect rate limits
     if (cards.length > 0) {
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 75));
     }
 
     const card = await searchCard(name);
@@ -83,6 +86,9 @@ export async function getAllSets(): Promise<ScryfallSet[]> {
     const cacheKey = CACHE_KEYS.SETS_LIST;
     const cached = scryfallCache.get<ScryfallSet[]>(cacheKey);
     if (cached) return cached;
+
+    // Add delay to respect rate limits
+    await new Promise((resolve) => setTimeout(resolve, 75));
 
     const response = await fetch(`${SCRYFALL_API_BASE}/sets`);
 
@@ -126,6 +132,9 @@ export async function getSetCards(setCode: string): Promise<string[]> {
     let page = 1;
 
     while (hasMore) {
+      // Add delay to respect rate limits
+      await new Promise((resolve) => setTimeout(resolve, 75));
+
       const response = await fetch(
         `${SCRYFALL_API_BASE}/cards/search?q=s:${setCode}&page=${page}`
       );
@@ -142,11 +151,6 @@ export async function getSetCards(setCode: string): Promise<string[]> {
       // Check if there are more pages
       hasMore = data.has_more;
       page++;
-
-      // Add a small delay to respect rate limits
-      if (hasMore) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
     }
 
     // Remove duplicates (some cards might appear multiple times in a set)

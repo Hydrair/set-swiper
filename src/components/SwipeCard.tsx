@@ -57,8 +57,8 @@ export default function SwipeCard({
           />
         </div>
 
-        <div className="p-3">
-          <h3 className="text-base font-semibold text-gray-800 mb-1">
+        <div className="p-2 md:p-3">
+          <h3 className="text-sm md:text-base font-semibold text-gray-800 mb-1">
             {card.name}
           </h3>
           {card.manaCost && (
