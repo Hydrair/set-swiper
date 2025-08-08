@@ -39,6 +39,21 @@ export default function FavoritesList() {
     URL.revokeObjectURL(url);
   };
 
+  const copyFavorites = async () => {
+    const cardNames = sortedFavorites.map((card) => card.name).join("\n");
+    try {
+      await navigator.clipboard.writeText(cardNames);
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement("textarea");
+      textArea.value = cardNames;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+    }
+  };
+
   if (favorites.length === 0) {
     return <EmptyFavorites />;
   }
@@ -55,6 +70,7 @@ export default function FavoritesList() {
         showImages={showImages}
         onToggleView={() => setShowImages(!showImages)}
         onExport={exportFavorites}
+        onCopy={copyFavorites}
       />
 
       <div className="flex-1 overflow-y-auto min-h-0">

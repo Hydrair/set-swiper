@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Download, Eye, ChevronDown } from "lucide-react";
+import { Download, Eye, ChevronDown, Copy } from "lucide-react";
 
 interface FavoritesHeaderProps {
   favoritesCount: number;
@@ -12,6 +12,7 @@ interface FavoritesHeaderProps {
   showImages: boolean;
   onToggleView: () => void;
   onExport: () => void;
+  onCopy: () => void;
 }
 
 export default function FavoritesHeader({
@@ -21,6 +22,7 @@ export default function FavoritesHeader({
   showImages,
   onToggleView,
   onExport,
+  onCopy,
 }: FavoritesHeaderProps) {
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -100,6 +102,13 @@ export default function FavoritesHeader({
           <span className="hidden md:inline">
             {showImages ? "List View" : "Grid View"}
           </span>
+        </button>
+        <button
+          onClick={onCopy}
+          className="flex items-center px-3 py-2 text-sm bg-theme-button text-theme-secondary rounded-md hover:bg-theme-button-hover focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+        >
+          <Copy className="w-4 h-4 md:mr-2" />
+          <span className="hidden md:inline">Copy List</span>
         </button>
         <button
           onClick={onExport}
