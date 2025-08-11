@@ -1,5 +1,6 @@
 import { scryfallCache, CACHE_KEYS } from './cache';
 import { MagicCard } from '@/types/card';
+import { CONFIG } from './config';
 
 const SCRYFALL_API_BASE = 'https://api.scryfall.com';
 
@@ -23,6 +24,25 @@ export interface ScryfallSet {
   released_at: string;
 }
 
+export function getCachedImageUrl(cardId: string, originalImageUrl: string): string {
+  if (!CONFIG.ENABLE_IMAGE_CACHING) {
+    return originalImageUrl;
+  }
+
+  // If we're in development, use the original URL to avoid caching issues
+  if (process.env.NODE_ENV === 'development') {
+    return originalImageUrl;
+  }
+
+  // In production, use our cached image endpoint
+  const params = new URLSearchParams({
+    id: cardId,
+    url: originalImageUrl,
+  });
+
+  return `/api/card-image?${params.toString()}`;
+}
+
 export async function searchCard(cardName: string): Promise<MagicCard | null> {
   try {
     const cacheKey = CACHE_KEYS.CARD_SEARCH(cardName);
@@ -30,7 +50,7 @@ export async function searchCard(cardName: string): Promise<MagicCard | null> {
     if (cached) return cached;
 
     // Add delay to respect rate limits
-    await new Promise((resolve) => setTimeout(resolve, 75));
+    await new Promise((resolve) => setTimeout(resolve, CONFIG.SCRYFALL_DELAY));
 
     const response = await fetch(`${SCRYFALL_API_BASE}/cards/named?fuzzy=${encodeURIComponent(cardName)}`);
 
@@ -42,12 +62,13 @@ export async function searchCard(cardName: string): Promise<MagicCard | null> {
     }
 
     const card: ScryfallCard = await response.json();
-    const imageUrl = card.image_uris?.normal || '';
+    const originalImageUrl = card.image_uris?.normal || '';
+    const cachedImageUrl = getCachedImageUrl(card.id, originalImageUrl);
 
     const result: MagicCard = {
       id: card.id,
       name: card.name,
-      imageUrl,
+      imageUrl: cachedImageUrl,
       manaCost: card.mana_cost,
       type: card.type_line,
       rarity: card.rarity,
@@ -55,7 +76,7 @@ export async function searchCard(cardName: string): Promise<MagicCard | null> {
       manaValue: card.cmc,
     };
 
-    scryfallCache.set(cacheKey, result, 24 * 60 * 60 * 1000); // 24 hour cache
+    scryfallCache.set(cacheKey, result, CONFIG.CARD_CACHE_DURATION);
     return result;
   } catch (error) {
     console.error('Error searching card:', error);
@@ -69,7 +90,7 @@ export async function searchMultipleCards(cardNames: string[]): Promise<MagicCar
   for (const name of cardNames) {
     // Add delay to respect rate limits
     if (cards.length > 0) {
-      await new Promise((resolve) => setTimeout(resolve, 75));
+      await new Promise((resolve) => setTimeout(resolve, CONFIG.SCRYFALL_DELAY));
     }
 
     const card = await searchCard(name);
@@ -88,7 +109,7 @@ export async function getAllSets(): Promise<ScryfallSet[]> {
     if (cached) return cached;
 
     // Add delay to respect rate limits
-    await new Promise((resolve) => setTimeout(resolve, 75));
+    await new Promise((resolve) => setTimeout(resolve, CONFIG.SCRYFALL_DELAY));
 
     const response = await fetch(`${SCRYFALL_API_BASE}/sets`);
 
@@ -99,7 +120,7 @@ export async function getAllSets(): Promise<ScryfallSet[]> {
     const data = await response.json();
     const sets = data.data as ScryfallSet[];
 
-    scryfallCache.set(cacheKey, sets, 24 * 60 * 60 * 1000); // 24 hour cache
+    scryfallCache.set(cacheKey, sets, CONFIG.CARD_CACHE_DURATION);
     console.log(sets);
     return sets;
   } catch (error) {
@@ -133,7 +154,7 @@ export async function getSetCards(setCode: string): Promise<string[]> {
 
     while (hasMore) {
       // Add delay to respect rate limits
-      await new Promise((resolve) => setTimeout(resolve, 75));
+      await new Promise((resolve) => setTimeout(resolve, CONFIG.SCRYFALL_DELAY));
 
       const response = await fetch(
         `${SCRYFALL_API_BASE}/cards/search?q=s:${setCode}&page=${page}`
@@ -189,7 +210,7 @@ export async function getPopularSets(): Promise<ScryfallSet[]> {
       .sort((a, b) => new Date(b.released_at).getTime() - new Date(a.released_at).getTime())
       .slice(0, 20); // Top 20 most recent popular sets
 
-    scryfallCache.set(cacheKey, popularSets, 24 * 60 * 60 * 1000); // 24 hour cache
+    scryfallCache.set(cacheKey, popularSets, CONFIG.CARD_CACHE_DURATION);
     return popularSets;
   } catch (error) {
     console.error('Error fetching popular sets:', error);

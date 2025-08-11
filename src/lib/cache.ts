@@ -62,6 +62,7 @@ export const scryfallCache = new APICache();
 
 export const CACHE_KEYS = {
   CARD_SEARCH: (cardName: string) => `card:${cardName.toLowerCase()}`,
+  CARD_IMAGE: (cardId: string) => `image:${cardId}`,
   SETS_LIST: 'sets:all',
   POPULAR_SETS: 'sets:popular',
   SET_CARDS: (setCode: string) => `set:${setCode.toLowerCase()}`,
