@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useAppStore } from "@/lib/store";
 import SortSelector from "./SortSelector";
-import { CONFIG } from "@/lib/config";
+import { searchAllCardNames } from "@/lib/scryfall";
 
 interface ScryfallSearchProps {
   onCardsAdded: () => void;
@@ -14,62 +14,6 @@ export default function ScryfallSearch({ onCardsAdded }: ScryfallSearchProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState({ current: 0, total: 0 });
-
-  const fetchAllSearchResults = async (query: string): Promise<string[]> => {
-    const allCardNames: string[] = [];
-    let hasMore = true;
-    let page = 1;
-
-    while (hasMore) {
-      // Add delay to respect rate limits
-      if (page > 1) {
-        await new Promise((resolve) =>
-          setTimeout(resolve, CONFIG.SCRYFALL_DELAY)
-        );
-      }
-
-      const response = await fetch(
-        `https://api.scryfall.com/cards/search?q=${encodeURIComponent(
-          query
-        )}&page=${page}`
-      );
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          break; // No more results
-        }
-        throw new Error(`Search failed: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      if (!data.data || data.data.length === 0) {
-        break; // No more results
-      }
-
-      const cardNames = data.data.map((card: { name: string }) => card.name);
-      allCardNames.push(...cardNames);
-
-      // Update progress
-      setProgress({
-        current: allCardNames.length,
-        total: data.total_cards || allCardNames.length,
-      });
-
-      // Check if there are more pages
-      hasMore = data.has_more;
-      page++;
-
-      // Safety check to prevent infinite loops
-      if (page > 100) {
-        console.warn("Reached maximum page limit, stopping pagination");
-        break;
-      }
-    }
-
-    // Remove duplicates (some cards might appear multiple times)
-    return [...new Set(allCardNames)];
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,7 +28,10 @@ export default function ScryfallSearch({ onCardsAdded }: ScryfallSearchProps) {
     setProgress({ current: 0, total: 0 });
 
     try {
-      const cardNames = await fetchAllSearchResults(searchQuery.trim());
+      const cardNames = await searchAllCardNames(
+        searchQuery.trim(),
+        (current, total) => setProgress({ current, total })
+      );
 
       if (cardNames.length === 0) {
         setError("No cards found matching your search criteria.");

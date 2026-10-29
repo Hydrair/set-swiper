@@ -24,6 +24,94 @@ export interface ScryfallSet {
   released_at: string;
 }
 
+interface ScryfallList<T> {
+  data: T[];
+  has_more: boolean;
+  next_page?: string;
+  total_cards?: number;
+}
+
+type RateLimitBucket = 'search' | 'default';
+
+const RATE_LIMIT_DELAYS: Record<RateLimitBucket, number> = {
+  search: CONFIG.SCRYFALL_SEARCH_DELAY,
+  default: CONFIG.SCRYFALL_DELAY,
+};
+
+const MAX_RATE_LIMIT_RETRIES = 3;
+
+// Requests are chained per bucket so concurrent callers can't exceed the rate limit
+const rateLimitQueues: Record<RateLimitBucket, Promise<void>> = {
+  search: Promise.resolve(),
+  default: Promise.resolve(),
+};
+
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+function waitForRateLimit(bucket: RateLimitBucket): Promise<void> {
+  const turn = rateLimitQueues[bucket];
+  rateLimitQueues[bucket] = turn.then(() => sleep(RATE_LIMIT_DELAYS[bucket]));
+  return turn;
+}
+
+async function scryfallFetch(url: string, bucket: RateLimitBucket): Promise<Response> {
+  for (let attempt = 0; ; attempt++) {
+    await waitForRateLimit(bucket);
+
+    const response = await fetch(url, { headers: { Accept: 'application/json' } });
+
+    if (response.status !== 429 || attempt >= MAX_RATE_LIMIT_RETRIES) {
+      return response;
+    }
+
+    // Back off before retrying, honoring Retry-After if Scryfall sends it
+    const retryAfter = Number(response.headers.get('Retry-After'));
+    const backoff = retryAfter > 0 ? retryAfter * 1000 : 1000 * 2 ** attempt;
+    console.warn(`Scryfall rate limit hit, retrying in ${backoff}ms`);
+    await sleep(backoff);
+  }
+}
+
+/**
+ * Fetches every page of a Scryfall card search by following `next_page`.
+ * Returns an empty list if the query matches no cards.
+ */
+export async function searchAllCardNames(
+  query: string,
+  onProgress?: (current: number, total: number) => void
+): Promise<string[]> {
+  const allCardNames: string[] = [];
+  let nextUrl: string | undefined =
+    `${SCRYFALL_API_BASE}/cards/search?q=${encodeURIComponent(query)}`;
+  let page = 0;
+
+  while (nextUrl) {
+    if (++page > CONFIG.SCRYFALL_MAX_PAGES) {
+      console.warn('Reached maximum page limit, stopping pagination');
+      break;
+    }
+
+    const response = await scryfallFetch(nextUrl, 'search');
+
+    if (!response.ok) {
+      // Scryfall answers 404 when a query has no matches
+      if (response.status === 404 && page === 1) {
+        return [];
+      }
+      throw new Error(`Scryfall API error: ${response.status}`);
+    }
+
+    const data: ScryfallList<{ name: string }> = await response.json();
+    allCardNames.push(...data.data.map((card) => card.name));
+    onProgress?.(allCardNames.length, data.total_cards ?? allCardNames.length);
+
+    nextUrl = data.has_more ? data.next_page : undefined;
+  }
+
+  // Remove duplicates (some cards might appear multiple times)
+  return [...new Set(allCardNames)];
+}
+
 export function getCachedImageUrl(cardId: string, originalImageUrl: string): string {
   if (!CONFIG.ENABLE_IMAGE_CACHING) {
     return originalImageUrl;
@@ -49,10 +137,10 @@ export async function searchCard(cardName: string): Promise<MagicCard | null> {
     const cached = scryfallCache.get<MagicCard>(cacheKey);
     if (cached) return cached;
 
-    // Add delay to respect rate limits
-    await new Promise((resolve) => setTimeout(resolve, CONFIG.SCRYFALL_DELAY));
-
-    const response = await fetch(`${SCRYFALL_API_BASE}/cards/named?fuzzy=${encodeURIComponent(cardName)}`);
+    const response = await scryfallFetch(
+      `${SCRYFALL_API_BASE}/cards/named?fuzzy=${encodeURIComponent(cardName)}`,
+      'search'
+    );
 
     if (!response.ok) {
       if (response.status === 404) {
@@ -88,11 +176,7 @@ export async function searchMultipleCards(cardNames: string[]): Promise<MagicCar
   const cards: MagicCard[] = [];
 
   for (const name of cardNames) {
-    // Add delay to respect rate limits
-    if (cards.length > 0) {
-      await new Promise((resolve) => setTimeout(resolve, CONFIG.SCRYFALL_DELAY));
-    }
-
+    // searchCard is rate limited internally
     const card = await searchCard(name);
     if (card) {
       cards.push(card);
@@ -108,10 +192,7 @@ export async function getAllSets(): Promise<ScryfallSet[]> {
     const cached = scryfallCache.get<ScryfallSet[]>(cacheKey);
     if (cached) return cached;
 
-    // Add delay to respect rate limits
-    await new Promise((resolve) => setTimeout(resolve, CONFIG.SCRYFALL_DELAY));
-
-    const response = await fetch(`${SCRYFALL_API_BASE}/sets`);
+    const response = await scryfallFetch(`${SCRYFALL_API_BASE}/sets`, 'default');
 
     if (!response.ok) {
       throw new Error(`Failed to fetch sets: ${response.status}`);
@@ -148,34 +229,7 @@ export async function getSetCards(setCode: string): Promise<string[]> {
     const cached = scryfallCache.get<string[]>(cacheKey);
     if (cached) return cached;
 
-    const allCardNames: string[] = [];
-    let hasMore = true;
-    let page = 1;
-
-    while (hasMore) {
-      // Add delay to respect rate limits
-      await new Promise((resolve) => setTimeout(resolve, CONFIG.SCRYFALL_DELAY));
-
-      const response = await fetch(
-        `${SCRYFALL_API_BASE}/cards/search?q=s:${setCode}&page=${page}`
-      );
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch set cards: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const cardNames = data.data.map((card: { name: string }) => card.name) as string[];
-
-      allCardNames.push(...cardNames);
-
-      // Check if there are more pages
-      hasMore = data.has_more;
-      page++;
-    }
-
-    // Remove duplicates (some cards might appear multiple times in a set)
-    const uniqueCardNames = [...new Set(allCardNames)];
+    const uniqueCardNames = await searchAllCardNames(`s:${setCode}`);
 
     scryfallCache.set(cacheKey, uniqueCardNames, 60 * 60 * 1000); // 1 hour cache
     return uniqueCardNames;

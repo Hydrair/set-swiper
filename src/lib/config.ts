@@ -11,5 +11,12 @@ export const CONFIG = {
   IMAGE_CACHE_DURATION: 7 * 24 * 60 * 60 * 1000, // 7 days
 
   // Scryfall API rate limiting delay (in milliseconds)
-  SCRYFALL_DELAY: 75,
+  // See https://scryfall.com/docs/api/rate-limits
+  SCRYFALL_DELAY: 100,
+
+  // /cards/search and /cards/named are limited to 2 requests per second
+  SCRYFALL_SEARCH_DELAY: 500,
+
+  // Safety limit for paginated search results (175 cards per page)
+  SCRYFALL_MAX_PAGES: 100,
 } as const;
