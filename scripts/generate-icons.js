@@ -1,22 +1,28 @@
 const fs = require('fs');
 const path = require('path');
+const sharp = require('sharp');
 
-// This is a placeholder script
-// In a real implementation, you would use a library like sharp or svg2png
-// to convert the SVG to PNG files of different sizes
+// Generates the PNG icons referenced by manifest.json and layout.tsx from icon.svg
+// Run with: pnpm generate-icons
 
 const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
 
-console.log('Icon generation script');
-console.log('To generate PNG icons, you can:');
-console.log('1. Use an online SVG to PNG converter');
-console.log('2. Use a tool like sharp or svg2png');
-console.log('3. Use a design tool like Figma or Sketch');
+const iconsDir = path.join(__dirname, '..', 'public', 'icons');
+const svg = fs.readFileSync(path.join(iconsDir, 'icon.svg'));
 
-console.log('\nRequired icon sizes:');
-sizes.forEach(size => {
-  console.log(`- ${size}x${size}px`);
+async function main() {
+  for (const size of sizes) {
+    const outFile = path.join(iconsDir, `icon-${size}x${size}.png`);
+    // Render the SVG at 4x before downscaling so edges stay crisp
+    await sharp(svg, { density: 72 * 4 })
+      .resize(size, size)
+      .png()
+      .toFile(outFile);
+    console.log(`Generated ${path.relative(process.cwd(), outFile)}`);
+  }
+}
+
+main().catch((error) => {
+  console.error('Icon generation failed:', error);
+  process.exit(1);
 });
-
-console.log('\nPlace the generated PNG files in: public/icons/');
-console.log('Files should be named: icon-{size}x{size}.png'); 
