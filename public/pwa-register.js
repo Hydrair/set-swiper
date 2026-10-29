@@ -1,7 +1,8 @@
 // PWA Registration Script
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
+    // Relative to the page so it works under a base path (e.g. GitHub Pages)
+    navigator.serviceWorker.register('sw.js')
       .then((registration) => {
         console.log('SW registered: ', registration);
       })

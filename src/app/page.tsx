@@ -35,8 +35,9 @@ export default function Home() {
     }
   };
 
+  // overflow-clip keeps swiped cards from creating scrollbars at the viewport edge
   return (
-    <div className="min-h-screen bg-theme-primary">
+    <div className="min-h-screen bg-theme-primary overflow-clip">
       <Navigation currentView={currentView} onViewChange={setCurrentView} />
 
       <main className="mx-auto py-4 md:py-8 px-4">{renderCurrentView()}</main>

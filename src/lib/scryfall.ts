@@ -112,25 +112,6 @@ export async function searchAllCardNames(
   return [...new Set(allCardNames)];
 }
 
-export function getCachedImageUrl(cardId: string, originalImageUrl: string): string {
-  if (!CONFIG.ENABLE_IMAGE_CACHING) {
-    return originalImageUrl;
-  }
-
-  // If we're in development, use the original URL to avoid caching issues
-  if (process.env.NODE_ENV === 'development') {
-    return originalImageUrl;
-  }
-
-  // In production, use our cached image endpoint
-  const params = new URLSearchParams({
-    id: cardId,
-    url: originalImageUrl,
-  });
-
-  return `/api/card-image?${params.toString()}`;
-}
-
 export async function searchCard(cardName: string): Promise<MagicCard | null> {
   try {
     const cacheKey = CACHE_KEYS.CARD_SEARCH(cardName);
@@ -150,13 +131,11 @@ export async function searchCard(cardName: string): Promise<MagicCard | null> {
     }
 
     const card: ScryfallCard = await response.json();
-    const originalImageUrl = card.image_uris?.normal || '';
-    const cachedImageUrl = getCachedImageUrl(card.id, originalImageUrl);
 
     const result: MagicCard = {
       id: card.id,
       name: card.name,
-      imageUrl: cachedImageUrl,
+      imageUrl: card.image_uris?.normal || '',
       manaCost: card.mana_cost,
       type: card.type_line,
       rarity: card.rarity,

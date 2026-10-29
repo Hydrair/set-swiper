@@ -1,9 +1,10 @@
 const CACHE_NAME = 'set-swiper-v1';
+// Relative to the service worker location so it works under a base path
 const urlsToCache = [
-  '/',
-  '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
+  './',
+  'manifest.json',
+  'icons/icon-192x192.png',
+  'icons/icon-512x512.png'
 ];
 
 // Install event - cache resources
